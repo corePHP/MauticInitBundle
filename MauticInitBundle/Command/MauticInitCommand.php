@@ -67,7 +67,7 @@ EOT
 		define('MAUTICINIT_USERNAME', $input->getArgument('username'));
 		define('MAUTICINIT_PASSWORD', $input->getArgument('password'));
 		define('MAUTICINIT_MASTERUSER', $input->getArgument('masteruser'));
-		defined('MAUTICINIT_MASTERPASS', $input->getArgument('masterpass'));
+		define('MAUTICINIT_MASTERPASS', $input->getArgument('masterpass'));
 
         // Drop any old data.
         $command = $this->getApplication()->find('doctrine:schema:drop');
