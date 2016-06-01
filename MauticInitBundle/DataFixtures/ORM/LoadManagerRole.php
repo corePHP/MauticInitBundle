@@ -7,7 +7,7 @@
  * @license     MIT
  */
 
-namespace Mautic\InstallBundle\InstallFixtures\ORM;
+namespace MauticPlugin\MauticInitBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

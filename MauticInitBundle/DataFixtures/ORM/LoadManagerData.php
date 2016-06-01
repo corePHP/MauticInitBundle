@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Mautic\UserBundle\Entity\User;
 
-class LoadAdminData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadManagerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
 
 	private $container;
