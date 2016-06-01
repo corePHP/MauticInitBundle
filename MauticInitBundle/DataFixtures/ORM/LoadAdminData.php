@@ -40,9 +40,9 @@ class LoadAdminData extends AbstractFixture implements OrderedFixtureInterface, 
 		{
 			$password = MAUTICINIT_MASTERPASS;
 		}
-		if (defined('MAUTICINIT_EMAIL'))
+		if (defined('MAUTICINIT_MASTEREMAIL'))
 		{
-			$email = MAUTICINIT_EMAIL;
+			$email = MAUTICINIT_MASTEREMAIL;
 		}
 
 		if (!$email || !$username || !$password)

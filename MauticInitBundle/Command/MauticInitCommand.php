@@ -34,7 +34,8 @@ class MauticInitCommand extends ContainerAwareCommand
 				new InputArgument('username', InputArgument::REQUIRED, 'The Username'),
 				new InputArgument('password', InputArgument::REQUIRED, 'Password'),
 				new InputArgument('masteruser', InputArgument::REQUIRED, 'Master Username'),
-				new InputArgument('masterpass', InputArgument::REQUIRED, 'Master Password')
+				new InputArgument('masterpass', InputArgument::REQUIRED, 'Master Password'),
+				new InputArgument('masteremail', InputArgument::REQUIRED, 'Master Email')
             ))
             ->setHelp(<<<EOT
 The <info>%command.name%</info> command initializes Mautic with a single manager account and a master admin account.
@@ -68,6 +69,7 @@ EOT
 		define('MAUTICINIT_PASSWORD', $input->getArgument('password'));
 		define('MAUTICINIT_MASTERUSER', $input->getArgument('masteruser'));
 		define('MAUTICINIT_MASTERPASS', $input->getArgument('masterpass'));
+		define('MAUTICINIT_MASTEREMAIL', $input->getArgument('masteremail'));
 
         // Drop any old data.
         $command = $this->getApplication()->find('doctrine:schema:drop');
