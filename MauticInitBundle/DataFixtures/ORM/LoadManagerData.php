@@ -28,31 +28,41 @@ class LoadAdminData extends AbstractFixture implements OrderedFixtureInterface, 
 
 	public function load(ObjectManager $manager)
 	{
+		$fname = null;
+		$lname = null;
 		$email = null;
 		$username = null;
 		$password = null;
-		
-		if (defined('MAUTICINIT_MASTERUSER'))
+
+		if (defined('MAUTICINIT_FNAME'))
 		{
-			$username = MAUTICINIT_MASTERUSER;
+			$fname = MAUTICINIT_FNAME;
 		}
-		if (defined('MAUTICINIT_MASTERPASS'))
+		if (defined('MAUTICINIT_LNAME'))
 		{
-			$password = MAUTICINIT_MASTERPASS;
+			$lname = MAUTICINIT_LNAME;
 		}
 		if (defined('MAUTICINIT_EMAIL'))
 		{
 			$email = MAUTICINIT_EMAIL;
 		}
+		if (defined('MAUTICINIT_USERNAME'))
+		{
+			$username = MAUTICINIT_USERNAME;
+		}
+		if (defined('MAUTICINIT_PASSWORD'))
+		{
+			$password = MAUTICINIT_PASSWORD;
+		}
 
-		if (!$email || !$username || !$password)
+		if (!$fname || !$lname || !$email || !$username || !$password)
 		{
 			return false;
 		}
 
 		$user = new User();
-		$user->setFirstName('Master');
-		$user->setLastName('Admin');
+		$user->setFirstName($fname);
+		$user->setLastName($lname);
 		$user->setUsername($username);
 		$user->setEmail($email);
 		$encoder = $this->container
@@ -60,7 +70,7 @@ class LoadAdminData extends AbstractFixture implements OrderedFixtureInterface, 
 			->getEncoder($user)
 		;
 		$user->setPassword($encoder->encodePassword($password, $user->getSalt()));
-		$user->setRole($this->getReference('admin-role'));
+		$user->setRole($this->getReference('manager-role'));
 		$manager->persist($user);
 		$manager->flush();
 	}

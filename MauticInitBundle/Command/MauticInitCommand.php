@@ -33,9 +33,11 @@ class MauticInitCommand extends ContainerAwareCommand
 				new InputArgument('email', InputArgument::REQUIRED, 'Email Address'),
 				new InputArgument('username', InputArgument::REQUIRED, 'The Username'),
 				new InputArgument('password', InputArgument::REQUIRED, 'Password'),
+				new InputArgument('masteruser', InputArgument::REQUIRED, 'Master Username'),
+				new InputArgument('masterpass', InputArgument::REQUIRED, 'Master Password')
             ))
             ->setHelp(<<<EOT
-The <info>%command.name%</info> command initializes Mautic with a single administrator account.
+The <info>%command.name%</info> command initializes Mautic with a single manager account and a master admin account.
 				
 If Mautic has been previously setup through the install page, this command will remove all data and re-install the database.  
 	
@@ -47,7 +49,7 @@ The interactive shell will ask you for the following: first name, last name, ema
 
 You can optionally provide the required fields as arguments like so
 
-<info>php %command.full_name% {first_name} {last_name} {email} {username} {password}</info>
+<info>php %command.full_name% {first_name} {last_name} {email} {username} {password} {masteruser} {masterpass}</info>
 EOT
         );
     }
@@ -64,6 +66,8 @@ EOT
 		define('MAUTICINIT_EMAIL', $input->getArgument('email'));
 		define('MAUTICINIT_USERNAME', $input->getArgument('username'));
 		define('MAUTICINIT_PASSWORD', $input->getArgument('password'));
+		define('MAUTICINIT_MASTERUSER', $input->getArgument('masteruser'));
+		defined('MAUTICINIT_MASTERPASS', $input->getArgument('masterpass'));
 
         // Drop any old data.
         $command = $this->getApplication()->find('doctrine:schema:drop');
