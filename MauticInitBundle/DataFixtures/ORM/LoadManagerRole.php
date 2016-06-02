@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Mautic\UserBundle\Entity\Role;
+use Mautic\CoreBundle\Factory\MauticFactory;
 
 /**
  * Class RoleData
