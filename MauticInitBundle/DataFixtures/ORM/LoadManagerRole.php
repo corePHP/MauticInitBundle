@@ -40,10 +40,37 @@ class LoadManagerRole extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        $rawPermissions = [
+			'asset:categories' => ['full'],
+			'asset:assets' => ['full'],
+			'campaign:categories' => ['full'],
+			'campaign:campaigns' => ['full'],
+			'category:categories' => ['full'],
+			'email:categories' => ['full'],
+			'email:emails' => ['full'],
+			'form:categories' => ['full'],
+			'form:forms' => ['full'],
+			'page:categories' => ['full'],
+			'page:pages' => ['full'],
+			'lead:leads' => ['full'],
+			'lead:lists' => ['full'],
+			'lead:fields' => ['full'],
+			'point:categories' => ['full'],
+			'point:points' => ['full'],
+			'point:triggers' => ['full'],
+			'report:reports' => ['full']
+		];
+		// Create our permissions.
+		
         $role = new Role();
         $role->setName('Manager');
         $role->setDescription('Manager Access');
         $role->setIsAdmin(0);
+		
+		$factory = new MauticFactory($this->container);
+		$model = new RoleModel($factory);
+		$model->setRolePermissions($role, $rawPermissions);
+		
         $manager->persist($role);
         $manager->flush();
 
