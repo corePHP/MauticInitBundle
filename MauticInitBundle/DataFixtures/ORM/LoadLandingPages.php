@@ -31,8 +31,7 @@ class LoadLandingPages extends AbstractFixture implements OrderedFixtureInterfac
 
 	public function load(ObjectManager $manager)
 	{
-		$factory = new MauticFactory($this->container);
-		$model = $factory->getModel('page.page');
+		$model = $this->container->get('mautic.factory')->getModel('page.page');
 		
 		$finder = new Finder();
 		$finder->directories()->in(__DIR__ . '/../../../../themes')->name('goodlife*');

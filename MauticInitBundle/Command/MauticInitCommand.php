@@ -70,6 +70,19 @@ EOT
 		define('MAUTICINIT_MASTERUSER', $input->getArgument('masteruser'));
 		define('MAUTICINIT_MASTERPASS', $input->getArgument('masterpass'));
 		define('MAUTICINIT_MASTEREMAIL', $input->getArgument('masteremail'));
+		
+		// Flush cache.  Cache errors have been causing this script to fail
+        $command = $this->getApplication()->find('cache:clear');
+        $input = new ArrayInput(array(
+            'command' => 'cache:clear',
+            '--env'   => $env,
+            '--quiet'  => true
+        ));
+        $returnCode = $command->run($input, $output);
+
+        if ($returnCode !== 0) {
+            return $returnCode;
+        }
 
         // Drop any old data.
         $command = $this->getApplication()->find('doctrine:schema:drop');

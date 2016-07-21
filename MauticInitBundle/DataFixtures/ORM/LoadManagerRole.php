@@ -69,8 +69,7 @@ class LoadManagerRole extends AbstractFixture implements OrderedFixtureInterface
         $role->setDescription('Manager Access');
         $role->setIsAdmin(0);
 		
-		$factory = new MauticFactory($this->container);
-		$model = new RoleModel($factory);
+		$model = $this->container->get('mautic.factory')->getModel('user.role');
 		$model->setRolePermissions($role, $rawPermissions);
 		
         $manager->persist($role);
