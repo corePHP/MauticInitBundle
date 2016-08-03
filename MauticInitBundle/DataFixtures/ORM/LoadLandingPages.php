@@ -39,7 +39,13 @@ class LoadLandingPages extends AbstractFixture implements OrderedFixtureInterfac
 		{
 			$page = new Page();
 			$template = basename($dir->getRealPath());
-			$title = ucfirst($template);
+			$title = $this->getTitle($template);
+			
+			if($title === false)
+			{
+				// Unrecognized template naming convention.
+				continue;
+			}
 			
 			$page->setTitle($title)
 				->setTemplate($template);
@@ -51,5 +57,19 @@ class LoadLandingPages extends AbstractFixture implements OrderedFixtureInterfac
 	public function getOrder()
 	{
 		return 13;
+	}
+	
+	protected function getTitle($template)
+	{
+		$parts = explode('_', $template);
+		if(count($parts) === 2)
+		{
+			$title = ucfirst($parts[0]);
+			return $title;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
