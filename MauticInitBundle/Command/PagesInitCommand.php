@@ -22,14 +22,21 @@ use Symfony\Component\Finder\Finder;
  */
 class PagesInitCommand extends ContainerAwareCommand
 {
+	
+	protected $ibo_info_link;
+	protected $ibo_enroll_link;
+	protected $member_info_link;
+	protected $member_enroll_link;
 
     protected function configure()
     {
         $this->setName('corephp:mautic:initpages')
             ->setDescription('String replaces hrefs for Goodlife themes.')
             ->setDefinition(array(
-                new InputArgument('info_link', InputArgument::REQUIRED, 'More Info URL'),
-				new InputArgument('enroll_link', InputArgument::REQUIRED, 'Buy Now URL')
+                new InputArgument('ibo_info_link', InputArgument::REQUIRED, 'IBO More Info URL'),
+				new InputArgument('ibo_enroll_link', InputArgument::REQUIRED, 'IBO Buy Now URL'),
+				new InputArgument('member_info_link', InputArgument::REQUIRED, 'Member More Info URL'),
+				new InputArgument('member_enroll_link', InputArgument::REQUIRED, 'Member Buy Now URL')
             ))
             ->setHelp(<<<EOT
 The <info>%command.name%</info> command performs a string replace on hrefs for the sales and info links in Goodlife templates.
@@ -41,18 +48,18 @@ EOT
     {
 		$options = $input->getOptions();
 
-        $info_link = $input->getArgument('info_link');
-		$enroll_link = $input->getArgument('enroll_link');
+        $this->ibo_info_link = $input->getArgument('ibo_info_link');
+		$this->ibo_enroll_link = $input->getArgument('ibo_enroll_link');
+		$this->member_info_link = $input->getArgument('member_info_link');
+		$this->member_enroll_link = $input->getArgument('member_enroll_link');
 		
-		if(filter_var($info_link, FILTER_VALIDATE_URL) === false)
+		// Validate our arguments are URLs.
+		if(filter_var($this->ibo_info_link, FILTER_VALIDATE_URL) === false
+			|| filter_var($this->ibo_enroll_link, FILTER_VALIDATE_URL) === false
+			|| filter_var($this->member_info_link, FILTER_VALIDATE_URL) === false
+			|| filter_var($this->member_enroll_link, FILTER_VALIDATE_URL) === false)
 		{
-			$output->writeln(sprintf("Expected info_link to be a valid URL, got \"%s\".", $info_link));
-			return 1;
-		}
-		
-		if(filter_var($enroll_link, FILTER_VALIDATE_URL) === false)
-		{
-			$output->writeln(sprintf("Expected enroll_link to be a valid URL, got \"%s\".", $enroll_link));
+			$output->writeln("Invalid URLs for links.  Check arguments and try again.");
 			return 1;
 		}
 		
@@ -66,6 +73,10 @@ EOT
 			
 			if(file_exists($realPath))
 			{
+				$filename = basename($realPath);
+				
+				list($info_link, $enroll_link) = $this->getLinks($filename);
+				
 				$contents = file_get_contents($realPath);
 				$contents = str_replace('|ENROLL LINK|', $enroll_link, $contents);
 				$contents = str_replace('|INFO LINK|', $info_link, $contents);
@@ -77,4 +88,18 @@ EOT
 
         return 0;
     }
+	
+	protected function getLinks($filename)
+	{
+		$filename = strtolower($filename);
+		
+		if(strpos($filename, 'ibo') === 0)
+		{
+			return array($this->ibo_info_link, $this->ibo_enroll_link);
+		}
+		else
+		{
+			return array($this->member_info_link, $this->member_enroll_link);
+		}
+	}
 }
