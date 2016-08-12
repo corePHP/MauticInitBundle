@@ -72,10 +72,8 @@ EOT
 			$realPath = $file->getRealpath();
 			
 			if(file_exists($realPath))
-			{
-				$filename = basename($realPath);
-				
-				list($info_link, $enroll_link) = $this->getLinks($filename);
+			{	
+				list($info_link, $enroll_link) = $this->getLinks($realPath);
 				
 				$contents = file_get_contents($realPath);
 				$contents = str_replace('|ENROLL LINK|', $enroll_link, $contents);
@@ -89,11 +87,11 @@ EOT
         return 0;
     }
 	
-	protected function getLinks($filename)
+	protected function getLinks($realPath)
 	{
-		$filename = strtolower($filename);
+		$realPath = strtolower($realPath);
 		
-		if(strpos($filename, 'ibo') === 0)
+		if(strstr($realPath, 'ibo') !== false)
 		{
 			return array($this->ibo_info_link, $this->ibo_enroll_link);
 		}
