@@ -32,12 +32,14 @@ class LoadLandingPages extends AbstractFixture implements OrderedFixtureInterfac
 	public function load(ObjectManager $manager)
 	{
 		$model = $this->container->get('mautic.factory')->getModel('page.page');
+		$helper = $this->container->get('mautic.helper.theme');
+		$templating = $this->container->get('templating');
 		
 		$finder = new Finder();
 		$finder->directories()->in(__DIR__ . '/../../../../themes');
 		foreach($finder as $dir)
 		{
-			$page = new Page();
+			$page = $model->getEntity();
 			$template = basename($dir->getRealPath());
 			$title = $this->getTitle($template);
 			
@@ -47,8 +49,13 @@ class LoadLandingPages extends AbstractFixture implements OrderedFixtureInterfac
 				continue;
 			}
 			
+			$logicalName = $helper->checkForTwigTemplate(':' . $template . ':page.html.php');
+			
+			$customHTML = $templating->render($logicalName);
+			
 			$page->setTitle($title)
-				->setTemplate($template);
+				->setTemplate($template)
+				->setCustomHtml($customHTML);
 			
 			$model->saveEntity($page);
 		}
