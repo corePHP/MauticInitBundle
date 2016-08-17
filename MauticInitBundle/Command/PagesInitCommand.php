@@ -65,7 +65,7 @@ EOT
 		
 		//Find our page.html.php files.
 		$finder = new Finder();
-		$finder->files()->in(__DIR__ . '/../../../themes/*/html')->name('page.html.php');
+		$finder->files()->in(__DIR__ . '/../../../themes/*/html')->name('page.html.twig');
 		
 		foreach($finder as $file)
 		{
